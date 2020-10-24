@@ -24,7 +24,7 @@ app.route("/articles")
             if(!err) {
                 res.send(articles);
             } else {
-                rs.send(err);
+                res.send(err);
             }
         });
     })
@@ -49,17 +49,26 @@ app.route("/articles")
         });
     });
 
-app.route("/article/:article")
+app.route("/articles/:articleTitle")
 .get(function(req, res) {
-    const articleTitle = req.params.article;
-    console.log(articleTitle);
-    // Article.find({title: article}, function(err, article) {
-    //     if(!err) {
-    //         res.send(article);
-    //     } else {
-    //         rs.send(err);
-    //     }
-    // });
+    const articleTitle = req.params.articleTitle;
+    Article.findOne({title: articleTitle}, function(err, article) {
+        if(!err) {
+            res.send(article);
+        } else {
+            res.send(err);
+        }
+    });
+})
+.put(function(req,res) {
+    const articleTitle = req.params.articleTitle;
+    Article.replaceOne({title: articleTitle}, {title: req.body.title,content: req.body.content} , function(err) {
+        if(!err) {
+            res.send("article updated successfully!");
+        } else {
+            res.send(err);
+        }
+    });
 });
 
 
